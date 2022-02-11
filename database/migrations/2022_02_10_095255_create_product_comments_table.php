@@ -13,7 +13,7 @@ class CreateProductCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('product_comments', function (Blueprint $table) {
+        Schema::create('product_comments', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id')->nullable();
             $table->integer('user_id')->nullable();
@@ -31,8 +31,7 @@ class CreateProductCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('product_comments', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('product_comments');
+
     }
 }

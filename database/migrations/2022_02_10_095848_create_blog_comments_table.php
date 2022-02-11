@@ -13,8 +13,15 @@ class CreateBlogCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('blog_comments', function (Blueprint $table) {
-            //
+        Schema::create('blog_comments', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id')->unsigned();
+            $table->integer('blog_id')->unsigned();
+            $table->string('email');
+            $table->string('name');
+            $table->string('messages');
+
+            $table->timestamps();
         });
     }
 
@@ -25,8 +32,6 @@ class CreateBlogCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('blog_comments', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('blog_comments');
     }
 }

@@ -13,8 +13,12 @@ class CreateBlogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            //
+        Schema::create('blogs', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned();
+            $table->string('image');
+            $table->string('category');
+            $table->string('content');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class CreateBlogsTable extends Migration
      */
     public function down()
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('blogs');
     }
 }
