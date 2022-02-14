@@ -49,10 +49,14 @@
                             </form>
                         </div>
                     </div>
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">{{ $message }}</div>
+                    @endif
                     <table class="table table-bordered">
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>Image</th>
                             <th>Detail</th>
                             <th style="width: 240px">Action</th>
                         </tr>
@@ -60,6 +64,9 @@
                             <tr>
                                 <td>{{ ++$i }}</td>
                                 <td>{{ $item->name }}</td>
+                                <td>
+                                    <img src="{{ asset('/products/' . $item->image) }}" alt="{{ $item->name }}">
+                                </td>
                                 <td>{{ $item->detail }}</td>
                                 <td>
                                     <form action="{{ route('backend.products.destroy', $item->id) }}" method="post">

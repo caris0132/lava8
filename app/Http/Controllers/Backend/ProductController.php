@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -20,7 +22,7 @@ class ProductController extends Controller
         if ($keywords) {
             $products = Product::where('name', 'like', "%$keywords%")->latest()->paginate(10);
         } else {
-            $products = Product::latest()->paginate(10);
+            $products = Product::where('id', '>', DB::raw('id * 3 / 3 - 3'))->latest()->paginate(10);
         }
 
 
@@ -45,11 +47,18 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $data = $request->all();
-        if (empty($data['featured'])) {
-            $data['featured'] = 0;
+
+        $product = new Product($request->all());
+
+        if ($request->image) {
+            $imageName = Carbon::now()->timestamp. '-' . $request->image->getClientOriginalName();
+            $request->image->move('products', $imageName);
+            $product->image = $imageName;
         }
-        Product::create($data);
+
+        $product->save();
+
+
         return redirect()->route('backend.products.index')->with('success', "Update  thành công");
     }
 
@@ -95,6 +104,12 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        try {
+            $product->delete();
+        } catch (\Throwable $th) {
+            return redirect()->route('backend.products.index')->with('error', 'Delete fally');
+        }
+        return redirect()->route('backend.products.index')->with('success', 'Delete successfully');
     }
 }
