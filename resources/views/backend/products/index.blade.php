@@ -65,7 +65,7 @@
                                 <td>{{ ++$i }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>
-                                    <img src="{{ asset('/products/' . $item->image) }}" alt="{{ $item->name }}">
+                                    <img class="img-fluid" src="{{ asset('/uploads/products/' . $item->image) }}" alt="{{ $item->name }}">
                                 </td>
                                 <td>{{ $item->detail }}</td>
                                 <td>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\ProductController as BackendProductController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ThumbController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,15 +21,7 @@ Route::get('/', function () {
 });
 
 
-Route::prefix('admin')->name('backend.')->group(function () {
-    Route::get('', function () {
-        return view('backend.dashboard.index');
-    });
-
-    Route::resources([
-        'products' => BackendProductController::class,
-    ]);
-});
+Route::get('/thumbs/{width}x{height}x{crop}/{src}', [ThumbController::class, 'thumb'])->where('src', '.*.(jpg|png)');
 
 Route::resources([
     'products' => ProductController::class

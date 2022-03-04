@@ -8,6 +8,7 @@ use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class ProductController extends Controller
 {
@@ -22,7 +23,7 @@ class ProductController extends Controller
         if ($keywords) {
             $products = Product::where('name', 'like', "%$keywords%")->latest()->paginate(10);
         } else {
-            $products = Product::where('id', '>', DB::raw('id * 3 / 3 - 3'))->latest()->paginate(10);
+            $products = Product::latest()->paginate(10);
         }
 
 
@@ -36,7 +37,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('backend.products.create');
+        $product = new Product();
+        $action = URL::route('backend.products.store');
+        return view('backend.products.create_or_update');
     }
 
     /**
@@ -81,7 +84,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        return view('backend.products.create_or_update', compact('product'));
     }
 
     /**
