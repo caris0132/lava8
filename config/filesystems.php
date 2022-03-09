@@ -81,6 +81,7 @@ return [
     'links' => [
         public_path('thumbs') => storage_path('app/public/thumbs'),
         public_path('watermark') => storage_path('app/public/watermark'),
+        public_path('uploads') => storage_path('app/public/uploads'),
     ],
 
 ];

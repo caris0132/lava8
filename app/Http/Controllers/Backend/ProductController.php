@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +39,9 @@ class ProductController extends Controller
     public function create()
     {
         $product = new Product();
-        $action = URL::route('backend.products.store');
-        return view('backend.products.create_or_update');
+
+        return $this->edit(new Product());
+        return view('backend.products.create_or_update')->with(compact('productCategory'));
     }
 
     /**
@@ -50,18 +52,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-
-        $product = new Product($request->all());
-
-        if ($request->image) {
-            $imageName = Carbon::now()->timestamp. '-' . $request->image->getClientOriginalName();
-            $request->image->move('products', $imageName);
-            $product->image = $imageName;
-        }
-
-        $product->save();
-
-
+        return $this->update($request, new Product());
         return redirect()->route('backend.products.index')->with('success', "Update  thành công");
     }
 
@@ -79,26 +70,35 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id);
+        $productCategory = ProductCategory::all();
+        $itemDetail = $product;
 
-        return view('backend.products.create_or_update', compact('product'));
+        return view('backend.products.create_or_update', compact('itemDetail', 'productCategory'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $product->fill($request->all());
+        if ($request->image) {
+            $imageName = Carbon::now()->timestamp. '-' . $request->image->getClientOriginalName();
+            $request->image->storeAs('uploads/products', $imageName, 'public');
+            $product->image = $imageName;
+        }
+
+        $product->save();
+        return redirect()->route('backend.products.index')->with('success', 'Cập nhật thành công!');
     }
 
     /**

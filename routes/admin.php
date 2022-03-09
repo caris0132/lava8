@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\Auth\LoginController;
+use App\Http\Controllers\Backend\ProductCategoryController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::resources([
         'products' => ProductController::class,
-        'product-categories' => ProductCategory::class
+        'product-categories' => ProductCategoryController::class
     ]);
 });
 

@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/thumbs/{width}x{height}x{crop}/{src}', [ThumbController::class, 'thumb'])->where('src', '.*.(jpg|png)');
+Route::get('/thumbs/{width}x{height}x{crop}/{src}', [ThumbController::class, 'thumb'])->where('src', '.*.(jpg|png)')->name('thumbs');
 
 Route::resources([
     'products' => ProductController::class

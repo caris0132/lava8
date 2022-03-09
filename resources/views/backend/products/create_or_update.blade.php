@@ -49,26 +49,53 @@
                                         </ul>
                                     </div>
                                 @endif
-
-                                <form method="post" action="{{ route('backend.products.store') }}" enctype="multipart/form-data">
+                                @if ($itemDetail->exists)
+                                <form method="post" action="{{ route('backend.products.update', $itemDetail) }}"
+                                enctype="multipart/form-data">
+                                @method('put')
+                                @else
+                                <form method="post" action="{{ route('backend.products.store') }}"
+                                enctype="multipart/form-data">
+                                @endif
                                     @csrf
                                     <div class="card-body">
                                         <div class="form-group">
+                                            <label for="exampleInputCategories">Danh mục</label>
+                                            <select name="product_category_id" class="form-control">
+                                                <option value="0">Chọn danh mục</option>
+                                                @if ($productCategory)
+                                                    @foreach ($productCategory as $item_danhmuc)
+                                                        @if ($item_danhmuc->id == $itemDetail->product_category_id)
+                                                            <option value="<?= $item_danhmuc->id ?>" selected>
+                                                                <?= $item_danhmuc->name ?>
+                                                            </option>
+                                                        @else
+                                                            <option value="<?= $item_danhmuc->id ?>">
+                                                                <?= $item_danhmuc->name ?>
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
                                             <label for="exampleInputName">Name</label>
                                             <input type="text" name="name" class="form-control" id="exampleInputName"
-                                                placeholder="Enter name">
+                                                placeholder="Enter name" value="{{ old('name', $itemDetail->name) }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputDetail">Detail</label>
-                                            <textarea type="text" name="detail" class="form-control" id="exampleInputDetail"
-                                                placeholder="Detail"></textarea>
+                                            <textarea type="text" name="detail" class="form-control"
+                                                id="exampleInputDetail" placeholder="Detail">{{ old('detail', $itemDetail->detail) }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputFile">File input</label>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="image" class="custom-file-input"
-                                                    id="exampleInputFile">
+                                                        id="exampleInputFile">
                                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                                         file</label>
                                                 </div>
@@ -79,13 +106,13 @@
                                         </div>
                                         <div class="form-check">
                                             <input type="hidden" name="featured" value="0">
-                                            <input type="checkbox" checked name="featured" class="form-check-input" value="1" id="exampleCheck1">
+                                            <input type="checkbox" checked name="featured" class="form-check-input"
+                                                value="1" id="exampleCheck1">
                                             <label class="form-check-label" for="exampleCheck1">Check me out</label>
                                         </div>
                                     </div>
 
                                     <div class="card-footer">
-                                        <input type="hidden" name="product_category_id" value="1">
                                         <input type="hidden" name="brand_id" value="1">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
