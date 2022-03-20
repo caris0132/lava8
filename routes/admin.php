@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\Auth\AdminAuthController;
 use App\Http\Controllers\Backend\Auth\LoginController;
 use App\Http\Controllers\Backend\ProductCategoryController;
 use App\Http\Controllers\Backend\ProductController;
@@ -17,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::match(['get', 'post'], '/login', [LoginController::class, 'login'])->name('login');
+Route::match(['get', 'post'], '/login', [AdminAuthController::class, 'login'])->name('login');
+Route::match(['get', 'post'], '/register', [AdminAuthController::class, 'register'])->name('register');
+Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth:admin')->group(function () {
     Route::get('/', function() {

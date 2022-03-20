@@ -27,6 +27,8 @@ class ProductController extends Controller
             $products = Product::latest()->paginate(10);
         }
 
+        Product::select('featured', 'id')->where('featured', 1)->lazy()->each->update(['featured' => 0]);
+
 
         return view('backend.products.index', compact('products'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
